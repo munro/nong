@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <title>Pong!</title>
+        <script src="raphael-min.js"></script>
+        <script src="underscore.js"></script>
+    </head>
+    <body>
+    </body>
+        <script>
+//
+
+var players = [
+    {color: Raphael.hsl(200, 100, 50)},
+    {color: Raphael.hsl(300, 100, 50)},
+    {color: Raphael.hsl(100, 100, 50)},
+    {color: Raphael.hsl(160, 100, 50)},
+    {color: Raphael.hsl(240, 100, 50)},
+];
+
+var paper = Raphael(0, 0, 320, 200);
+
+function getPoints(players) {
+    var step = (Math.PI * 2) / players.length, seg = 0;
+    return _.map(players, function (player) {
+        return _.extend({
+            seg: [
+                [Math.cos(seg) * 90 + 100, Math.sin(seg) * 90 + 100],
+                [Math.cos(seg += step) * 90 + 100, Math.sin(seg) * 90 + 100]
+            ]
+        }, player);
+    });
+}
+console.log(getPoints(players));
+
+
+paper.createPath = function (a, b) {
+    return this.path('M' + a[0] + ',' + a[1] + 'L' + b[0] + ',' + b[1]);
+};
+function draw(players) {
+    paper.clear();
+
+    var count = 1;
+    _.each(getPoints(players), function (player) {
+        paper.createPath(player.seg[0], player.seg[1]).attr({
+            stroke: player.color,
+            'stroke-width': 5,
+            'stroke-linecap': 'round'
+        });
+        count += 1;
+    });
+}
+
+draw(players);
+
+
+console.log('rwar');
+//
+        </script>
+</html>
