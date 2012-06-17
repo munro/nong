@@ -8,62 +8,41 @@
      * @module screen
      */
     var engine = (function (engine) {
-        var container = document.createElement('div');
-        document.body.appendChild(container);
+        var container = document.getElementById('rwar');
 
-        var camera = new THREE.PerspectiveCamera(75,
-            window.innerWidth / window.innerHeight, 1, 10000);
 
-        camera.position.z = 100;
-
+        var renderer = new THREE.WebGLRenderer();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        document.body.appendChild(renderer.domElement);
+        var camera = new THREE.PerspectiveCamera(45,
+            window.innerWidth / window.innerHeight, 1, 500);
+        camera.position.set(0, 0, 100);
+        camera.lookAt(new THREE.Vector3(0, 0, 0));
         var scene = new THREE.Scene();
 
-        scene.add(camera);
-
-        var renderer = new THREE.CanvasRenderer();
-        renderer.setSize(window.innerWidth, window.innerHeight);
-        window.addEventListener('resize', function () {
-            renderer.setSize(window.innerWidth, window.innerHeight);
-            camera.aspect = window.innerWidth / window.innerHeight;
-            camera.updateProjectionMatrix();
-        }, false);
-
-        container.appendChild(renderer.domElement);
-
-        // particles
+        var material = new THREE.LineBasicMaterial({
+            color: 0x0000ff,
+        });
 
         var geometry = new THREE.Geometry();
+        geometry.vertices.push(new THREE.Vector3(-10, 0, 0));
+        geometry.vertices.push(new THREE.Vector3(0, 10, 0));
+        geometry.vertices.push(new THREE.Vector3(10, 0, 0));
 
-        //geometry.vertices.push(particle.position);
-
-        // lines
-
-        var line = new THREE.Line(geometry, new THREE.LineBasicMaterial({
-            color: 0xffffff,
-            opacity: 0.5
-        }));
+        var line = new THREE.Line(geometry, material);
 
         scene.add(line);
 
         function render() {
-            engine.emit('render');
-            //camera.position.x += (-camera.position.x) * 0.05;
-            //camera.position.y += (200 - camera.position.y) * 0.05;
-            camera.lookAt(scene.position);
-
             renderer.render(scene, camera);
         }
 
         function animate() {
-
             requestAnimationFrame(animate);
-
             render();
         }
 
         animate();
-
-        return engine;
     }(new EventEmitter()));
 
     /**
