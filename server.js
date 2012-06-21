@@ -16,6 +16,7 @@ var server = connect.createServer();
  * Browserify—bundles the client side JavaScript & templates
  */
 server.use(browserify({
+    entry: path.resolve(path.join('lib', 'index.js')),
     mount: '/game.js',
     require: {
         //backbone: 'backbone',
@@ -23,9 +24,7 @@ server.use(browserify({
         //jquery: 'jquery-browserify'
     },
     watch: true
-}).addEntry(
-    path.resolve(path.join('lib', 'index.js'))
-));
+}));
 
 /**
  * Load the static files.
